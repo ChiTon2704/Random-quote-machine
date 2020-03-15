@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import RandomQuote from './components/RandomQuote'
+import {Provider,connect} from 'react-redux';
+import {createStore} from 'redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const action=()=>{
+  return {
+    type: 'Click',
+    quote:this.props.quote,
+    author:this.props.author,
+    color:this.props.color
+  }
 }
-
+const reducer =(state,action)=>{
+  switch(action.type){
+    case 'Click':
+      return{
+        color:action.color,
+        author:action.author,
+        quote:action.quote
+      }
+      default : return state;
+  }
+}
+const store=createStore(reducer);
+// const mapStateToProps=(state)=>{
+//   return state;
+// }
+const mapDispatchToProps =(dispatch)=>{
+  return {
+    onClick: () =>{
+      dispatch(action());
+    }
+  }
+}
+const Contain=connect( mapDispatchToProps)(RandomQuote);
+class App extends Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    return (
+      <div>
+        <Provider store={store}>
+          <Contain/>
+          </Provider>
+      </div>
+    );
+  }
+}
 export default App;
